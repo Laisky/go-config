@@ -1,2 +1,3 @@
-# go-config
-go config files base by viper
+# Go-Config
+
+Separate from Laisky/go-utils Settings
