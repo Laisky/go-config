@@ -3,7 +3,7 @@ module github.com/Laisky/go-config
 go 1.18
 
 require (
-	github.com/Laisky/go-utils/v2 v2.0.4-0.20220716055519-ebe4a39b82b2
+	github.com/Laisky/go-utils/v2 v2.0.4-0.20220716063848-24b7b7edf910
 	github.com/Laisky/zap v1.19.3-0.20220707055623-fe1750cd1b41
 	github.com/fsnotify/fsnotify v1.5.4
 	github.com/pkg/errors v0.9.1

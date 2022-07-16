@@ -42,8 +42,8 @@ github.com/Laisky/fast-skiplist v0.0.0-20210907063351-e00546c800a6 h1:V3MNilKNjN
 github.com/Laisky/fast-skiplist v0.0.0-20210907063351-e00546c800a6/go.mod h1:BdpS7FU5kzp0QV/dtCWheAV5rIOQu+Jb+uoVuVWZOvU=
 github.com/Laisky/go-chaining v0.0.0-20180507092046-43dcdc5a21be h1:7Rxhm6IjOtDAyj8eScOFntevwzkWhx94zi48lxo4m4w=
 github.com/Laisky/go-chaining v0.0.0-20180507092046-43dcdc5a21be/go.mod h1:1mdzaETo0kjvCQICPSePsoaatJN4l7JvEA1200lyevo=
-github.com/Laisky/go-utils/v2 v2.0.4-0.20220716055519-ebe4a39b82b2 h1:+jQB0bf7Ho/Nf/zVVoM+WqNUBz5dqiNCBmskOotgR0M=
-github.com/Laisky/go-utils/v2 v2.0.4-0.20220716055519-ebe4a39b82b2/go.mod h1:IO4H55q56hzc8T72TTW5PrqESRrMhYrd18YNyyCV+Ao=
+github.com/Laisky/go-utils/v2 v2.0.4-0.20220716063848-24b7b7edf910 h1:JIqmR0CpMRmNOKNM0TmaN0lcDH4Mf0i8/GsY6b8U780=
+github.com/Laisky/go-utils/v2 v2.0.4-0.20220716063848-24b7b7edf910/go.mod h1:IO4H55q56hzc8T72TTW5PrqESRrMhYrd18YNyyCV+Ao=
 github.com/Laisky/graphql v1.0.5 h1:8eJ7mrXKVkKxZ+Nw1HPs3iQPVNxXGctysqTEY0lNBlc=
 github.com/Laisky/graphql v1.0.5/go.mod h1:ITUrUa/tkyD3MezVt4FKGGIGZokhG13kP8sImV86I1o=
 github.com/Laisky/zap v1.19.3-0.20220707055623-fe1750cd1b41 h1:mqeq1N2tzscftZeDXKtxMqK8vNbo9JjGvLrUs1T80I4=
