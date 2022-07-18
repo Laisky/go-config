@@ -39,9 +39,9 @@ import (
 //
 //   cfg := gconfig.New()
 //   cfg.LoadFromFile("/etc/app/settings.yml",
-//   	gconfig.WithSettingsEnableInclude(),
-// 		gconfig.WithSettingsAesEncrypt([]byte("secret")),
-// 		gconfig.WithSettingsWatchFileModified(nil),
+//   	gconfig.WithEnableInclude(),
+// 		gconfig.WithAesEncrypt([]byte("secret")),
+// 		gconfig.WithWatchFileModified(nil),
 //   )
 //
 //   cfg.Unmarshal(&yourConfigStruct)
@@ -64,9 +64,9 @@ type Config interface {
 	GetStringMapString(key string) map[string]string
 	ReadConfig(in io.Reader) error
 	MergeConfig(in io.Reader) error
-	LoadFromDir(dirPath string, opts ...SettingsOptFunc) error
-	LoadFromFile(entryFile string, opts ...SettingsOptFunc) (err error)
-	loadConfigFiles(opt *settingsOpt, cfgFiles []string) (err error)
+	LoadFromDir(dirPath string, opts ...Option) error
+	LoadFromFile(entryFile string, opts ...Option) (err error)
+	loadConfigFiles(opt *option, cfgFiles []string) (err error)
 	LoadFromConfigServer(url, app, profile, label string) (err error)
 	LoadFromConfigServerWithRawYaml(url, app, profile, label, key string) (err error)
 	LoadSettings()
@@ -248,12 +248,12 @@ func (s *config) MergeConfig(in io.Reader) error {
 }
 
 // LoadFromDir load settings from dir, default fname is `settings.yml`
-func (s *config) LoadFromDir(dirPath string, opts ...SettingsOptFunc) error {
+func (s *config) LoadFromDir(dirPath string, opts ...Option) error {
 	fpath := filepath.Join(dirPath, defaultConfigFileName)
 	return s.LoadFromFile(fpath, opts...)
 }
 
-type settingsOpt struct {
+type option struct {
 	enableInclude bool
 	aesKey        []byte
 	// encryptedSuffix encrypted file must end with this suffix
@@ -267,12 +267,12 @@ const (
 	defaultEncryptSuffix = ".enc"
 )
 
-func (o *settingsOpt) fillDefault() *settingsOpt {
+func (o *option) fillDefault() *option {
 	o.encryptedSuffix = defaultEncryptSuffix
 	return o
 }
 
-func (o *settingsOpt) applyOptfs(opts ...SettingsOptFunc) (*settingsOpt, error) {
+func (o *option) applyOptfs(opts ...Option) (*option, error) {
 	for _, opt := range opts {
 		if err := opt(o); err != nil {
 			return nil, err
@@ -282,20 +282,20 @@ func (o *settingsOpt) applyOptfs(opts ...SettingsOptFunc) (*settingsOpt, error) 
 	return o, nil
 }
 
-// SettingsOptFunc opt for settings
-type SettingsOptFunc func(*settingsOpt) error
+// Option opt for settings
+type Option func(*option) error
 
-// WithSettingsEnableInclude enable `include` in config file
-func WithSettingsEnableInclude() SettingsOptFunc {
-	return func(opt *settingsOpt) error {
+// WithEnableInclude enable `include` in config file
+func WithEnableInclude() Option {
+	return func(opt *option) error {
 		opt.enableInclude = true
 		return nil
 	}
 }
 
-// WithSettingsAesEncrypt decrypt config file by aes
-func WithSettingsAesEncrypt(key []byte) SettingsOptFunc {
-	return func(opt *settingsOpt) error {
+// WithAesEncrypt decrypt config file by aes
+func WithAesEncrypt(key []byte) Option {
+	return func(opt *option) error {
 		if len(key) == 0 {
 			return errors.Errorf("aes key is empty")
 		}
@@ -305,20 +305,20 @@ func WithSettingsAesEncrypt(key []byte) SettingsOptFunc {
 	}
 }
 
-// WithSettingsEncryptedFileSuffix only decrypt files which name ends with `encryptedSuffix`
-func WithSettingsEncryptedFileSuffix(suffix string) SettingsOptFunc {
-	return func(opt *settingsOpt) error {
+// WithEncryptedFileSuffix only decrypt files which name ends with `encryptedSuffix`
+func WithEncryptedFileSuffix(suffix string) Option {
+	return func(opt *option) error {
 		opt.encryptedSuffix = suffix
 		return nil
 	}
 }
 
-// WithSettingsWatchFileModified automate update when file modified
+// WithWatchFileModified automate update when file modified
 //
 // callback will be called when file modified.
 // you can set callback to nil if you don't want to process file changing event manually.
-func WithSettingsWatchFileModified(callback func(fsnotify.Event)) SettingsOptFunc {
-	return func(opt *settingsOpt) error {
+func WithWatchFileModified(callback func(fsnotify.Event)) Option {
+	return func(opt *option) error {
 		opt.watchModify = true
 		opt.watchModifyCallback = callback
 		return nil
@@ -328,7 +328,7 @@ func WithSettingsWatchFileModified(callback func(fsnotify.Event)) SettingsOptFun
 const settingsIncludeKey = "include"
 
 // isSettingsFileEncrypted encrypted file's name contains encryptedMark
-func isSettingsFileEncrypted(opt *settingsOpt, fname string) bool {
+func isSettingsFileEncrypted(opt *option, fname string) bool {
 	if opt.aesKey == nil {
 		return false
 	}
@@ -341,7 +341,7 @@ func isSettingsFileEncrypted(opt *settingsOpt, fname string) bool {
 	return false
 }
 
-func (s *config) watch(opt *settingsOpt, entryFile string, files []string, opts ...SettingsOptFunc) {
+func (s *config) watch(opt *option, entryFile string, files []string, opts ...Option) {
 	s.watchOnce.Do(func() {
 		if err := gutils.WatchFileChanging(context.Background(), files, func(e fsnotify.Event) {
 			if err := s.LoadFromFile(entryFile, opts...); err != nil {
@@ -360,8 +360,8 @@ func (s *config) watch(opt *settingsOpt, entryFile string, files []string, opts 
 }
 
 // LoadFromFile load settings from file
-func (s *config) LoadFromFile(entryFile string, opts ...SettingsOptFunc) (err error) {
-	opt, err := new(settingsOpt).fillDefault().applyOptfs(opts...)
+func (s *config) LoadFromFile(entryFile string, opts ...Option) (err error) {
+	opt, err := new(option).fillDefault().applyOptfs(opts...)
 	if err != nil {
 		return errors.Wrap(err, "apply options")
 	}
@@ -426,7 +426,7 @@ RECUR_INCLUDE_LOOP:
 	return nil
 }
 
-func (s *config) loadConfigFiles(opt *settingsOpt, cfgFiles []string) (err error) {
+func (s *config) loadConfigFiles(opt *option, cfgFiles []string) (err error) {
 	var (
 		filePath string
 		fp       *os.File

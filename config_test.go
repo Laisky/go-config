@@ -177,7 +177,7 @@ func TestSettingsToml(t *testing.T) {
 
 	t.Logf("load settings from: %v", fp.Name())
 	err = Shared.LoadFromFile(fp.Name(),
-		WithSettingsEnableInclude(),
+		WithEnableInclude(),
 	)
 	require.NoError(t, err)
 
@@ -199,7 +199,7 @@ func TestSettingsToml(t *testing.T) {
 		require.NoError(t, log.Shared.ChangeLevel(log.LevelDebug))
 		st := New()
 		err = st.LoadFromFile(fp.Name(),
-			WithSettingsWatchFileModified(func(e fsnotify.Event) {
+			WithWatchFileModified(func(e fsnotify.Event) {
 				t.Logf("file modified: %v", e.Name)
 			}),
 		)
