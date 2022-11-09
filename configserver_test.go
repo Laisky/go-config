@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	gutils "github.com/Laisky/go-utils/v2"
-	"github.com/Laisky/go-utils/v2/log"
+	gutils "github.com/Laisky/go-utils/v3"
+	"github.com/Laisky/go-utils/v3/log"
 	"github.com/Laisky/zap"
 )
 

@@ -7,10 +7,10 @@ import (
 	"strconv"
 	"strings"
 
-	gutils "github.com/Laisky/go-utils/v2"
-	"github.com/Laisky/go-utils/v2/log"
+	"github.com/Laisky/errors"
+	gutils "github.com/Laisky/go-utils/v3"
+	"github.com/Laisky/go-utils/v3/log"
 	"github.com/Laisky/zap"
-	"github.com/pkg/errors"
 )
 
 var httpClient *http.Client

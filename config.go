@@ -11,12 +11,12 @@ import (
 	"sync/atomic"
 	"time"
 
-	gutils "github.com/Laisky/go-utils/v2"
-	"github.com/Laisky/go-utils/v2/encrypt"
-	"github.com/Laisky/go-utils/v2/log"
+	"github.com/Laisky/errors"
+	gutils "github.com/Laisky/go-utils/v3"
+	"github.com/Laisky/go-utils/v3/encrypt"
+	"github.com/Laisky/go-utils/v3/log"
 	zap "github.com/Laisky/zap"
 	"github.com/fsnotify/fsnotify"
-	"github.com/pkg/errors"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
@@ -109,7 +109,7 @@ type config struct {
 //
 // Basic Usage
 //
-//	  import gutils "github.com/Laisky/go-utils/v2"
+//	  import gutils "github.com/Laisky/go-utils/v3"
 //
 //		 gutils.Shared.
 var Shared = New()
