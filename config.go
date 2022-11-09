@@ -23,7 +23,7 @@ import (
 
 // Config to load configurations from file
 //
-// Features
+// # Features
 //
 // support encrypted file with AES
 //
@@ -35,16 +35,16 @@ import (
 //
 // Example
 //
-//   import gconfig "github.com/Laisky/go-config"
+//	  import gconfig "github.com/Laisky/go-config"
 //
-//   cfg := gconfig.New()
-//   cfg.LoadFromFile("/etc/app/settings.yml",
-//   	gconfig.WithEnableInclude(),
-// 		gconfig.WithAesEncrypt([]byte("secret")),
-// 		gconfig.WithWatchFileModified(nil),
-//   )
+//	  cfg := gconfig.New()
+//	  cfg.LoadFromFile("/etc/app/settings.yml",
+//	  	gconfig.WithEnableInclude(),
+//			gconfig.WithAesEncrypt([]byte("secret")),
+//			gconfig.WithWatchFileModified(nil),
+//	  )
 //
-//   cfg.Unmarshal(&yourConfigStruct)
+//	  cfg.Unmarshal(&yourConfigStruct)
 //
 // More informations can be found at godoc samples
 type Config interface {
@@ -109,9 +109,9 @@ type config struct {
 //
 // Basic Usage
 //
-//   import gutils "github.com/Laisky/go-utils/v2"
+//	  import gutils "github.com/Laisky/go-utils/v2"
 //
-//	 gutils.Shared.
+//		 gutils.Shared.
 var Shared = New()
 
 var S = Shared
@@ -381,7 +381,7 @@ RECUR_INCLUDE_LOOP:
 		if fp, err = os.Open(curFpath); err != nil {
 			return errors.Wrapf(err, "open config file `%s`", curFpath)
 		}
-		defer gutils.CloseQuietly(fp)
+		defer gutils.SilentClose(fp)
 
 		s.v.SetConfigType(strings.TrimLeft(filepath.Ext(strings.TrimSuffix(curFpath, opt.encryptedSuffix)), "."))
 		if isSettingsFileEncrypted(opt, curFpath) {
@@ -437,7 +437,7 @@ func (s *config) loadConfigFiles(opt *option, cfgFiles []string) (err error) {
 			if fp, err = os.Open(filePath); err != nil {
 				return errors.Wrapf(err, "open config file `%s`", filePath)
 			}
-			defer gutils.CloseQuietly(fp)
+			defer gutils.SilentClose(fp)
 
 			if isSettingsFileEncrypted(opt, filePath) {
 				encryptedFp, err := encrypt.NewAesReaderWrapper(fp, opt.aesKey)
