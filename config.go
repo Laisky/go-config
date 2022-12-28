@@ -361,6 +361,12 @@ func (s *config) watch(opt *option, entryFile string, files []string, opts ...Op
 
 // LoadFromFile load settings from file
 func (s *config) LoadFromFile(entryFile string, opts ...Option) (err error) {
+	if ok, err := gutils.IsFile(entryFile); err != nil {
+		return errors.Wrapf(err, "check config file path %q", entryFile)
+	} else if !ok {
+		return errors.Errorf("%q is not a file", entryFile)
+	}
+
 	opt, err := new(option).fillDefault().applyOptfs(opts...)
 	if err != nil {
 		return errors.Wrap(err, "apply options")
