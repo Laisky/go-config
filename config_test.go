@@ -198,9 +198,13 @@ func TestSettingsToml(t *testing.T) {
 	t.Run("watch", func(t *testing.T) {
 		require.NoError(t, log.Shared.ChangeLevel(log.LevelDebug))
 		st := New()
+		changes := make(chan int, 16)
 		err = st.LoadFromFile(fp.Name(),
-			WithWatchFileModified(func(e fsnotify.Event) {
-				t.Logf("file modified: %v", e.Name)
+			WithWatchFileModified(func(_ fsnotify.Event) {
+				select {
+				case changes <- st.GetInt("foo.a"):
+				default:
+				}
 			}),
 		)
 		require.NoError(t, err)
@@ -217,8 +221,18 @@ func TestSettingsToml(t *testing.T) {
 		require.NoError(t, err)
 		fp.Close()
 
-		time.Sleep(time.Second)
-		require.Equal(t, 2, st.GetInt("foo.a"))
+		deadline := time.NewTimer(5 * time.Second)
+		defer deadline.Stop()
+		for {
+			select {
+			case got := <-changes:
+				if got == 2 {
+					return
+				}
+			case <-deadline.C:
+				t.Fatal("file watcher did not publish the updated setting")
+			}
+		}
 
 		// t.Error()
 	})

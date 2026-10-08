@@ -3,7 +3,7 @@ module github.com/Laisky/go-config
 go 1.18
 
 require (
-	github.com/Laisky/go-utils/v2 v2.2.0
+	github.com/Laisky/go-utils/v2 v2.3.0
 	github.com/Laisky/zap v1.19.3-0.20220902144311-ba5bb1d3eb31
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/pkg/errors v0.9.1
@@ -15,7 +15,7 @@ require (
 )
 
 require (
-	github.com/Laisky/errors v0.9.1 // indirect
+	github.com/Laisky/errors v0.9.2-0.20221107084216-4b771a197718 // indirect
 	github.com/Laisky/go-chaining v0.0.0-20180507092046-43dcdc5a21be // indirect
 	github.com/Laisky/graphql v1.0.5 // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
@@ -36,6 +36,7 @@ require (
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
+	github.com/xlzd/gotp v0.1.0 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/automaxprocs v1.5.1 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
